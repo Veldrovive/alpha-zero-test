@@ -21,7 +21,7 @@ class Trainer:
         self.tree = TreeSearch(self.game, self.agent, self.args)
         self.past_train_examples = []
         self.skip_first_self_play = False
-        self.apply_symmetry = False
+        self.apply_symmetry = True
         self.curr_player = None
 
     def play_episode(self):
@@ -49,10 +49,6 @@ class Trainer:
             else:
                 train_examples.append((perspective_board, self.curr_player, policy))
 
-            # if game_state is not None:
-            #     # We break here so we see the final move
-            #     break
-
             # Choose a random action from the list of possible actions with a probability equal to that actions's prob
             action = np.random.choice(len(policy), p=policy)
             board, self.curr_player = self.game.advance_game(board, self.curr_player, action)
@@ -69,16 +65,17 @@ class Trainer:
         for board, player, policy in train_examples:
             # A 1 game state means the current player won and -1 means current player lost
             value = game_state * (-1 if player == self.curr_player else 1)
-            self.log_board(board, policy, value, player)
+            # self.log_board(board*player, policy, value, player)
             training_data.append((board, policy, value))
-        self.log_board(final_board, final_policy, game_state*self.curr_player*-1, self.curr_player*-1)
-        log.debug("Game ended with %d winning", game_state)
+        # self.log_board(final_board, final_policy, game_state*self.curr_player*-1, self.curr_player*-1)
+        # log.info("Game ended with %d winning", game_state)
+        # exit(0)
         return training_data
 
     def log_board(self, board, policy, value, player):
         policy_board = np.reshape(policy, (8, 8))
         board = self.game.to_string(board)
-        log.debug(f"\nBoard:\n{board}\n--------\nPolicy:\n{policy_board}\n--------\nValue: {value}, Player: {player}\n        \n")
+        log.info(f"\nBoard:\n{board}\n--------\nPolicy:\n{policy_board}\n--------\nValue: {value}, Player: {player}\n        \n")
 
     def train(self):
         log.info("Starting training")
