@@ -26,6 +26,7 @@ class Agent:
         self.board_y, self.board_x = game.get_board_size()
         self.action_size = game.get_actions_size()
 
+        log.info(f"Using cuda: {args['cuda']}")
         if args["cuda"]:
             self.net.cuda()
 
