@@ -1,4 +1,7 @@
 import logging
+import torch
+import numpy as np
+import random
 
 import coloredlogs
 
@@ -25,6 +28,14 @@ args = {
     'numItersForTrainExamplesHistory': 20,
 
 }
+
+seed = 1
+
+if seed is not None:
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed(seed)
+    np.random.seed(seed)
+    random.seed(seed)
 
 def main():
     game = Gomaku(8)

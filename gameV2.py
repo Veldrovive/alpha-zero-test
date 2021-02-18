@@ -8,13 +8,13 @@ log = logging.getLogger(__name__)
 class Gomaku:
     content = {
         -1: "b",
-        0: " ",
+        0: "-",
         1: "w"
     }
 
     inverse_content = {
         "b": -1,
-        " ": 0,
+        "-": 0,
         "1": 1
     }
 
